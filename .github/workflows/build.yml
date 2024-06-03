@@ -90,10 +90,20 @@ jobs:
                                         -exec cp -v {} rel \;
           tar -C rel -cJvf libimobile-suite-latest_${{ matrix.arch }}-${{ matrix.msystem }}.tar.xz .
 
-      - name: publish release
-        env:
-          github_token: ${{secrets.GITHUB_TOKEN}}
+      - name: install AWS CLI
         run: |
-          TAG="${GITHUB_REF##*/}-${GITHUB_SHA:0:7}"
-          gh release create "$TAG" --draft --title "Draft Release"
-          gh release upload "$TAG" libimobile-suite-latest_${{ matrix.arch }}-${{ matrix.msystem }}.tar.xz
+          pacman -S --noconfirm aws-cli
+
+      - name: configure AWS credentials
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+          aws configure set region $AWS_REGION
+
+      - name: upload to S3
+        run: |
+          aws s3 cp libimobile-suite-latest_${{ matrix.arch }}-${{ matrix.msystem }}.tar.xz s3://usehearsayapp/win-libs/
