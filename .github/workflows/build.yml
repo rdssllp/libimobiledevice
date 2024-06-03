@@ -96,7 +96,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase origin HEAD  # Pull the latest changes and rebase
           git add libimobile-suite-latest_${{ matrix.arch }}-${{ matrix.msystem }}.tar.xz
           git commit -m "Add generated files for ${{ matrix.arch }}-${{ matrix.msystem }}"
+          git pull --rebase origin HEAD  # Pull the latest changes and rebase
           git push origin HEAD:${{ github.ref }}
