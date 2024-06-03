@@ -92,7 +92,7 @@ jobs:
 
       - name: install AWS CLI
         run: |
-          pacman -S --noconfirm aws-cli
+          choco install awscli -y
 
       - name: configure AWS credentials
         env:
