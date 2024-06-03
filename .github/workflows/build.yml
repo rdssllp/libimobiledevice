@@ -29,6 +29,7 @@ jobs:
             autoconf
             automake-wrapper
             mingw-w64-${{ matrix.arch }}-libzip
+            mingw-w64-${{ matrix.arch }}-pkgconf
 
       - uses: actions/checkout@v4
       - name: prepare environment
@@ -38,7 +39,6 @@ jobs:
 
       - name: install dependencies
         run: |
-          pacman -S --noconfirm mingw-w64-${{ matrix.arch }}-pkg-config
           pacman -S --noconfirm mingw-w64-${{ matrix.arch }}-libtool
           pacman -S --noconfirm mingw-w64-${{ matrix.arch }}-glib2
 
